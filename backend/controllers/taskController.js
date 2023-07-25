@@ -1,8 +1,10 @@
 const Task = require("../models/taskModel")
 
 const getTasks = async (req, res) => {
+    const user = req.user.id;
+
     try {
-        const tasks = await Task.find({});
+        const tasks = await Task.find({user});
         res.status(200).json(tasks);
     } catch (err) {
         res.status(500).json(err.message);
@@ -11,9 +13,10 @@ const getTasks = async (req, res) => {
 
 const newTask = async (req, res) => {
     const { task } = req.body;
+    const user = req.user.id;
 
     try {
-        const newTask = new Task({ task });
+        const newTask = new Task({ task, user});
         await newTask.save();
         res.status(200).json(newTask);
     } catch (err) {
@@ -40,7 +43,6 @@ const deleteTask = async (req, res) => {
 const updateTask = async (req, res) => {
     const taskId = req.params.id;
     const updatedTaskData = req.body;
-    console.log(updatedTaskData);
 
     try {
         const updatedTask = await Task.findByIdAndUpdate(taskId, updatedTaskData);
