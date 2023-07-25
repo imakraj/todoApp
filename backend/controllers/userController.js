@@ -16,20 +16,20 @@ const getUsers = async (req, res) => {
 const register = async (req, res) => {
     const { name, email, password } = req.body;
 
-    const user = await User.findOne({ email });
-
-    if (user) {
-        return res.status(409).json({ message: 'Username already exists' });
-    }
-
-    async function hashPassword(password) {
-        const saltRounds = 10;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(password, salt);
-        return hash;
-    }
-
     try {
+        const userExist = await User.findOne({ email });
+
+        if (userExist) {
+            return res.status(409).json({ message: 'Username already exists' });
+        }
+
+        async function hashPassword(password) {
+            const saltRounds = 10;
+            const salt = await bcrypt.genSalt(saltRounds);
+            const hash = await bcrypt.hash(password, salt);
+            return hash;
+        }
+
         const user = new User({
             name,
             email,
@@ -52,18 +52,18 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) {
-        return res.status(409).json({ message: 'Invalid credentials' });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
     try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(409).json({ message: 'Invalid credentials' });
+        }
+    
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+    
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
 
         const expirationTime = new Date(Date.now() + 3600000);
