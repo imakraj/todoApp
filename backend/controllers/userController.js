@@ -40,7 +40,7 @@ const register = async (req, res) => {
 
         const expirationTime = new Date(Date.now() + 3600000);
 
-        res.cookie('token', token, { httpOnly: true, expires: expirationTime });
+        res.cookie('token', token, { httpOnly: true, sameSite: "none", expires: expirationTime });
 
         user.save();
         res.status(201).json({ message: 'Registration successful', user });
@@ -68,8 +68,8 @@ const login = async (req, res) => {
 
         const expirationTime = new Date(Date.now() + 3600000);
 
-        res.cookie('token', token, { httpOnly: true, expires: expirationTime });
-        res.status(201).json({ message: 'Login successful' });
+        res.cookie('token', token, { httpOnly: true, sameSite: "none", expires: expirationTime });
+        res.status(201).json({ message: 'Login successful', user });
     } catch (err) {
         res.status(400).json(err.message);
     }

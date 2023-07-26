@@ -13,7 +13,7 @@ const corsOptions = {
     'http://localhost:3000',
     'http://127.0.0.1',
   ],  
-  methods: '*',
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true,
   exposedHeaders: ['set-cookie'],
 };
