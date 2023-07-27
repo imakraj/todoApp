@@ -20,7 +20,7 @@ const newTask = async (req, res) => {
         await newTask.save();
         res.status(200).json(newTask);
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -36,7 +36,7 @@ const deleteTask = async (req, res) => {
         }
         res.status(200).json(deletedTask);
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -53,7 +53,7 @@ const updateTask = async (req, res) => {
 
         res.status(200).json(updatedTask);
     } catch (err) {
-        res.status(500).json(err.message);
+        res.status(500).json({message: err.message});
     }
 }
 

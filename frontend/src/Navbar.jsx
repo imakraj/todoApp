@@ -6,12 +6,17 @@ import { Context } from './index';
 const Navbar = () => {
     const { isAuthenticated, user } = useContext(Context);
 
+    const capitalizeFirstLetter = (str) => {
+        if (!str) return "";
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
     return (
-        <div className='w-screen h-12 bg-slate-500 text-white flex justify-between items-center px-5'>
+        <div className='w-screen h-12 bg-gray-800 text-white flex justify-between items-center px-5'>
             <div>
                 <Link className="font-bold" to="/">ToDo</Link>
             </div>
-            {isAuthenticated ? "Hello " + user.name : " "}
+            {isAuthenticated ? "Hello " + capitalizeFirstLetter(user.name) : " "}
 
             {isAuthenticated ? <Logout /> : <div className='flex gap-2'>
                 <Link to="/login">Login</Link>

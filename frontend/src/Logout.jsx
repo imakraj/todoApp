@@ -15,8 +15,7 @@ const Logout = () => {
             setUser({});
             toast.success(response.data.message);
         } catch (error) {
-            console.error('Error fetching user', error.message);
-            toast.error("Something is fishy.");
+            toast.error(error.response.data.message);
             setIsAuthenticated(false);
         }
     }
