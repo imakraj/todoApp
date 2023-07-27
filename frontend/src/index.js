@@ -7,14 +7,14 @@ export const Context = createContext({ isAuthenticated: false });
 
 const AuthContext = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState({});
 
     return (
         <Context.Provider value={{
             isAuthenticated,
             setIsAuthenticated,
-            isLoggedIn,
-            setIsLoggedIn
+            user,
+            setUser
         }}>
             <App />
         </Context.Provider>

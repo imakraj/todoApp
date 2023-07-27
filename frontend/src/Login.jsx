@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { Context } from './index';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { isAuthenticated, setIsAuthenticated, setIsLoggedIn } = useContext(Context);
+    const { isAuthenticated, setIsAuthenticated} = useContext(Context);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,19 +18,16 @@ const Login = () => {
                 password
             }, { withCredentials: true });
 
-            localStorage.setItem("isLoggedIn",'1');
-            setIsLoggedIn(true);
             setIsAuthenticated(true);
-            console.log(response.data.user);
-            console.log(response.data.message);
+            toast.success(response.data.message);
         } catch (error) {
-            console.error('Error fetching user', error.message);
+            console.log(error.message);
+            toast.error("Invalid Credentials");
             setIsAuthenticated(false);
         }
     }
 
     if (isAuthenticated) {
-        console.log(isAuthenticated);
         return <Navigate to={"/"} />
     }
 

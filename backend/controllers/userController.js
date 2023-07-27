@@ -4,10 +4,11 @@ const jwt = require('jsonwebtoken');
 
 secretKey = "123";
 
-const getUsers = async (req, res) => {
+const getUser = async (req, res) => {
+    const userId = req.user.id;
     try {
-        const users = await User.find({});
-        res.status(200).json(users);
+        const user = await User.findOne({_id: userId});
+        res.status(200).json(user);
     } catch (err) {
         res.status(400).json(err.message);
     }
@@ -20,7 +21,7 @@ const register = async (req, res) => {
         const userExist = await User.findOne({ email });
 
         if (userExist) {
-            return res.status(409).json({ message: 'Username already exists' });
+            return res.status(409).json({ message: 'User already exists' });
         }
 
         async function hashPassword(password) {
@@ -54,13 +55,15 @@ const login = async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
+
         if (!user) {
             return res.status(409).json({ message: 'Invalid credentials' });
         }
     
         const isPasswordValid = await bcrypt.compare(password, user.password);
-    
+        
         if (!isPasswordValid) {
+            console.log(isPasswordValid);
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
@@ -71,6 +74,7 @@ const login = async (req, res) => {
         res.cookie('token', token, { httpOnly: true, sameSite: "none", expires: expirationTime });
         res.status(201).json({ message: 'Login successful', user });
     } catch (err) {
+        console.log("in try");
         res.status(400).json(err.message);
     }
 };
@@ -81,7 +85,7 @@ const logout = async (req, res) => {
 };
 
 module.exports = {
-    getUsers,
+    getUser,
     register,
     login,
     logout

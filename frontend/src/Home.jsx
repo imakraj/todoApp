@@ -3,24 +3,38 @@ import axios from 'axios';
 import CreateTask from './CreateTask';
 import { Context } from './index';
 import { Navigate } from 'react-router-dom';
+import Loading from './Loading';
 
 const Home = () => {
   const [tasks, setTasks] = useState([]);
-  const { isAuthenticated, setIsLoggedIn } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
+  const [loading, setLoading] = useState(true);
 
   const addNewTask = (newTask) => {
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   useEffect(() => {
-    const localstorageGetInformation=localStorage.getItem('isLoggedIn');
-
-    if(localstorageGetInformation==='1'){
-      setIsLoggedIn(true);
-    }
-
-    getTasks();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    getUser();
   }, []);
+
+  const getUser = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/api/users/user", {
+        withCredentials: true
+      });
+
+      getTasks();
+      setIsAuthenticated(true);
+      setUser(response.data);
+    } catch (error) {
+      setIsAuthenticated(false);
+      console.error('Error fetching tasks:', error.message);
+    }
+  };
 
   const getTasks = async () => {
     try {
@@ -28,7 +42,6 @@ const Home = () => {
         withCredentials: true
       });
 
-      
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error.message);
@@ -36,8 +49,6 @@ const Home = () => {
   };
 
   const deleteTask = async (id) => {
-    console.log("delte method called");
-    console.log(id);
     try {
       const response = await axios.delete(`http://localhost:3001/api/tasks/${id}`, {
         withCredentials: true,
@@ -66,8 +77,11 @@ const Home = () => {
     }
   }
 
+  if (loading) {
+    return <Loading />
+  }
+
   if (!isAuthenticated) {
-    console.log(isAuthenticated);
     return <Navigate to={"/login"} />
   }
 

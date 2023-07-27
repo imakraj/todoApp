@@ -1,14 +1,12 @@
 const Task = require("../models/taskModel")
 
 const getTasks = async (req, res) => {
-    console.log("getTasks method called");
     const user = req.user.id;
 
     try {
         const tasks = await Task.find({user});
         res.status(200).json(tasks);
     } catch (err) {
-        console.log("in cctah block")
         res.status(500).json(err.message);
     }
 }

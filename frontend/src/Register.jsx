@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Context } from '.';
+import { Navigate } from 'react-router-dom';
 
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {isAuthenticated, setIsAuthenticated} = useContext(Context);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,10 +20,16 @@ const Register = () => {
                 password
             }, { withCredentials: true });
 
-            console.log(response.data.message);
+            toast(response.data.message);
+            setIsAuthenticated(true);
         } catch (error) {
-            console.error('Error fetching user', error.response.data.message);
+            toast.error(error.response.data.message);
+            setIsAuthenticated(false);
         }
+    }
+
+    if (isAuthenticated) {
+        return <Navigate to={"/"} />
     }
 
     return (
