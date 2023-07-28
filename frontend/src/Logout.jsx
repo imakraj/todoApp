@@ -8,7 +8,7 @@ const Logout = () => {
     const { setIsAuthenticated, setUser } = useContext(Context);
     const logout = async () => {
         try {
-            const response = await axios.post("http://localhost:3001/api/users/logout",
+            const response = await axios.get("http://localhost:3001/api/users/logout",
                 { withCredentials: true });
 
             setIsAuthenticated(false);

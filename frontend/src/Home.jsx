@@ -12,6 +12,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   const capitalizeFirstLetter = (str) => {
+    if (!str) return "";
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
@@ -87,24 +88,13 @@ const Home = () => {
     return <Loading />
   }
 
+  console.log(isAuthenticated);
+
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />
   }
 
   return (
-    // <div className="h-screen w-screen grid place-items-center">
-    //   <ul>
-    //     {tasks.map((task) => (
-    //       <li key={task._id} className='flex m-4'>
-    //         <h3 className={task.isComplete ? "line-through text-red-500" : "no-underline"}>{task.task}</h3>
-    //         <button className="text-white ml-5 bg-red-600 rounded px-3" onClick={() => { deleteTask(task._id) }}>Delete</button>
-    //         <button className="text-white ml-5 rounded px-3 bg-green-700" onClick={() => { updateTask(task._id) }}>Done</button>
-    //       </li>
-    //     ))}
-    //   </ul>
-    //   <CreateTask onTaskCreated={addNewTask} />
-    // </div>
-
     <div className="flex items-center justify-center w-screen h-screen font-medium">
       <div className="flex flex-grow items-center justify-center bg-gray-900 h-full">
         <div className="max-w-full p-8 bg-gray-800 rounded-lg shadow-lg w-96 text-gray-200">
@@ -112,9 +102,8 @@ const Home = () => {
             <svg className="h-8 w-8 text-indigo-500 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
             </svg>
-            <h4 className="font-semibold ml-3 text-lg"> {capitalizeFirstLetter(user.name)} Do It now!</h4>
+            {isAuthenticated && user ? <h4 className="font-semibold ml-3 text-lg"> {capitalizeFirstLetter(user.name)} Do It now!</h4> : " "}
           </div>
-
           {tasks.map((task) => (
             <div className="flex items-center justify-between cursor-pointer hover:bg-gray-900" key={task._id}>
               <div onClick={() => { updateTask(task._id) }}>

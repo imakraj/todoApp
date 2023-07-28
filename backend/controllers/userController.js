@@ -7,7 +7,7 @@ secretKey = "123";
 const getUser = async (req, res) => {
     const userId = req.user.id;
     try {
-        const user = await User.findOne({_id: userId});
+        const user = await User.findOne({ _id: userId });
         res.status(200).json(user);
     } catch (err) {
         res.status(400).json(err.message);
@@ -59,9 +59,9 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(409).json({ message: 'Invalid credentials' });
         }
-    
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        
+
         if (!isPasswordValid) {
             console.log(isPasswordValid);
             return res.status(401).json({ message: 'Invalid credentials' });
@@ -73,14 +73,16 @@ const login = async (req, res) => {
 
         res.cookie('token', token, { httpOnly: true, sameSite: "none", expires: expirationTime });
         res.status(201).json({ message: 'Login successful', user });
+        console.log("from login " + req.cookies.token);
     } catch (err) {
-        console.log("in try");
         res.status(400).json(err.message);
     }
 };
 
 const logout = async (req, res) => {
-    res.clearCookie('token');
+    console.log(req.cookies.token)
+    res.clearCookie("token", { path: '/', domain: 'localhost' });
+    console.log("token release")
     res.json({ message: 'Logout successful' });
 };
 

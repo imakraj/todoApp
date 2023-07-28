@@ -16,7 +16,7 @@ const Navbar = () => {
             <div>
                 <Link className="font-bold" to="/">ToDo</Link>
             </div>
-            {isAuthenticated ? "Hello " + capitalizeFirstLetter(user.name) : " "}
+            {isAuthenticated && user ? "Hello " + capitalizeFirstLetter(user.name) : " "}
 
             {isAuthenticated ? <Logout /> : <div className='flex gap-2'>
                 <Link to="/login">Login</Link>
