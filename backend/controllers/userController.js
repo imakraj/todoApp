@@ -80,9 +80,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    console.log(req.cookies.token)
     res.clearCookie("token", { path: '/', domain: 'localhost' });
-    console.log("token release")
     res.json({ message: 'Logout successful' });
 };
 
